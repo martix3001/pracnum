@@ -1,0 +1,71 @@
+--1.05 powinno zwracac 6 wykladowcow
+select count(*) liczba_wykladowcow
+from wykladowcy
+--1.07 zwraca 3 studentow urodzonych w lutym
+select *
+from studenci
+where DATEPART(month,data_urodzenia)=2
+--1.11 Dwa warunki ze student chodzi na wyklad 4 i 11
+SELECT id_studenta
+FROM studenci_wyklady
+WHERE id_wykladu=4
+INTERSECT
+SELECT id_studenta
+FROM studenci_wyklady
+WHERE id_wykladu=11
+--1.19 Tworzonie tymczasowej tablicy cs - wielkosc liter ma znaczenie as- akcent sensitive
+CREATE TABLE #tmp (
+id int primary key,
+nazwisko varchar(30) collate polish_cs_as)
+INSERT INTO #tmp VALUES 
+(1,'Kowalski')
+,(2,'kowalski')
+,(3,'KoWaLsKi')
+,(4,'KOWALSKI')
+--mamy wlaczony cs w tabeli ale mozna w pytaniu modyfikowac dowolonie
+select *
+from #tmp
+where nazwisko collate polish_ci_as like'K%'
+-- wylaczylismy klauzula collate wrazliwosc na wielkosc liter wiec zapytanie i tak zwroci wszytskie zapytania
+--ZADANIA NA WŁASNA RĘKĘ :
+--1.01
+select id_studenta, data_egzaminu
+from oceny_studentow
+order by data_egzaminu DESC
+--1.02
+select id_studenta, data_egzaminu
+from oceny_studentow
+where DATEPART(year,data_egzaminu) = 2017 AND DATEPART(MONTH,data_egzaminu) = 3
+order by id_studenta DESC
+--1.03
+select *   
+from studenci
+where nr_grupy not like '%01%'
+order by nazwisko ASC, imie ASC
+--1.04
+select *
+from pracownicy
+where data_zatrudnienia is null or PESEL is null
+--1.05
+select count(*) liczba_wykladowcow
+from wykladowcy
+--1.06
+select SUM(liczba_godzin) suma_godzin
+from wyklady
+--1.07
+select *
+from studenci
+where DATEPART(month,data_urodzenia) = 2
+--1.08 Niezłe cudeńko
+select id_studenta,nr_grupy, 'student' s_w
+from studenci
+where nr_grupy like 'DMIe%'
+union all
+select id_wykladowcy,katedra, 'wykladowaca'
+from wykladowcy
+--1.09
+select nazwa_wykladu
+from wyklady
+where nazwa_wykladu like '%m%'
+--1.10
+
